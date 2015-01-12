@@ -28,11 +28,11 @@
     <script type="text/javascript" src="lib/jquery/dist/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="lib/jquery/dist/jquery.selectbox-0.2.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    <title>Chess Timer</title>
+    <title>Chess timer</title>
 </head>
 <body onload="hideButtonScreen()">
   <div id="start-screen">
-    <h1>Chess Timer</h1>
+    <h1>Chess timer</h1>
 
     <select name="timer-setting" id="timer-setting" tabindex="1">
         <option value="1">1 min</option>
@@ -58,6 +58,7 @@
     <br/>
     <br/>
 
+    <h2>Made by Div</h2>
 </div>
 
 <div id="button-screen">
