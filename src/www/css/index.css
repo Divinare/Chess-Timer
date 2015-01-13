@@ -20,13 +20,9 @@
 
 body {            
 
-    background-image:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #A7A7A7),
-        color-stop(0.51, #E4E4E4)
-    );
+    background-image: -webkit-linear-gradient(bottom left, #FFFFFF 0%, #3EEF9C 100%);
+   
+
     background-attachment:fixed;
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     height:100%;
@@ -37,6 +33,41 @@ body {
 
 #content {
     height: 100%;
+}
+
+.settings {
+    
+    margin-top: 50px;
+    margin-left: 50px;
+    
+}
+
+.startButton {
+    width: 40%;
+    background: #0bcf4f;
+    background-image: -webkit-linear-gradient(top, #0bcf4f, #63dbb3);
+    background-image: -moz-linear-gradient(top, #0bcf4f, #63dbb3);
+    background-image: -ms-linear-gradient(top, #0bcf4f, #63dbb3);
+    background-image: -o-linear-gradient(top, #0bcf4f, #63dbb3);
+    background-image: linear-gradient(to bottom, #0bcf4f, #63dbb3);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 25px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+}
+
+.startButton:hover {
+    background: #628194;
+    background-image: -webkit-linear-gradient(top, #628194, #3498db);
+    background-image: -moz-linear-gradient(top, #628194, #3498db);
+    background-image: -ms-linear-gradient(top, #628194, #3498db);
+    background-image: -o-linear-gradient(top, #628194, #3498db);
+    background-image: linear-gradient(to bottom, #628194, #3498db);
+    text-decoration: none;
 }
 
 .playButton {
@@ -69,6 +100,19 @@ body {
     text-decoration: none;
 }
 
+.playButton.top {
+  -moz-transform:rotate(-180deg); /* Firefox */
+  -webkit-transform:rotate(-180deg); /* Webkit */        
+  -ms-transform:rotate(-180deg); /* IE */
+  -o-transform:rotate(-180deg); /* Opera */
+  transform:rotate(-180deg); /* future */
+/* position:absolute; */
+}
+
+.playButton.bottom {
+
+}
+
 #startButton {
     width: 203px;
     height: 50px;
@@ -77,8 +121,7 @@ body {
 }
 
 .menuButton {
-    margin:0px;
-
+    margin: 0px;
     float:left;
     font-size: 200%;
     width: 50%;
@@ -114,6 +157,6 @@ body {
 }
 
 .swiper-slide {
-  width: 500px;
+  width: 100%;
   height: 100%;
 }

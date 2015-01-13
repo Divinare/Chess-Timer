@@ -4,28 +4,35 @@
 
 var Settings = React.createClass({
 
+    componentDidMount: function() {
+        var width = document.getElementById("timer-setting").offsetWidth;
+        document.getElementById("timer-setting").style.width = (width - 50) +'px';
+        
+    },
+
     render: function () {
         
         return (
-            <div className="swiper-slide settings">
-                <h1>Chess Timer</h1>
+            <div className="swiper-slide index">
+                <div className="settings">
+                    <h1>Chess Timer</h1>
 
-                <select name="timer-setting" id="timer-setting" tabindex="1">
-                    <option value="1">1 min</option>
-                    <option value="3">3 min</option>
-                    <option value="5">5 min</option>
-                    <option value="10">10 min</option>
-                    <option value="15">15 min</option>
-                    <option value="20">20 min</option>
-                    <option value="25">25 min</option>
-                    <option value="30">30 min</option>
-                    <option value="40">40 min</option>
-                    <option value="50">50 min</option>
-                    <option value="60">60 min</option>
-                </select>
-               
-                <button id='startButton' value="" onClick={this.props.startGame}>Start!</button>
-
+                    <select name="timer-setting" id="timer-setting" tabindex="1">
+                        <option value="1">1 min</option>
+                        <option value="3">3 min</option>
+                        <option value="5">5 min</option>
+                        <option value="10">10 min</option>
+                        <option value="15">15 min</option>
+                        <option value="20">20 min</option>
+                        <option value="25">25 min</option>
+                        <option value="30">30 min</option>
+                        <option value="40">40 min</option>
+                        <option value="50">50 min</option>
+                        <option value="60">60 min</option>
+                    </select>
+                    <br />
+                    <button className="startButton" value="" onClick={this.props.startGame}>Start!</button>
+                </div>
             </div>
         );
     }
@@ -52,10 +59,10 @@ var Timer = React.createClass({
     componentDidMount: function() {
         this.initGame();
         this.timer = setInterval(this.tick, 100);
+
     },
 
     changeTurn: function(player) {
-        console.log("START NEW IS " +startNew);
         if (startNew) {
             this.changePlayerTurn(player);
             return;
@@ -65,9 +72,6 @@ var Timer = React.createClass({
             return;
         }
         this.changePlayerTurn(player);
-        
-        console.log("turn changed to " + turn);
-        
     },
 
     changePlayerTurn: function(player) {
@@ -77,7 +81,6 @@ var Timer = React.createClass({
              } else {
                  turn = "player1";
              }
-             console.log("changed to false");
              startNew = false;
              paused = false;
         } else {
@@ -194,14 +197,14 @@ var Timer = React.createClass({
         return (
         <div className="swiper-slide timer">
             <div className="row">
-                <button className="playButton" id="player1" onClick={this.changeTurn.bind(this, "player1")}>123</button>
+                <button className="playButton top" id="player1" onClick={this.changeTurn.bind(this, "player1")}>123</button>
             </div>
             <div className="row">
                    <button className="menuButton" id="pauseButton" onClick={this.pauseGame.bind(this, "")}>Pause</button>
                    <button className="menuButton" id="newGameButton" onClick={this.newGame.bind(this, "")}>New Game</button>
             </div>
             <div className="row">
-               <button className="playButton" id="player2" onClick={this.changeTurn.bind(this, "player2")}>4234</button>
+               <button className="playButton bottom" id="player2" onClick={this.changeTurn.bind(this, "player2")}>4234</button>
             </div>
         </div>
     );
