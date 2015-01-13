@@ -5,7 +5,6 @@
 var Settings = React.createClass({
 
     startGame: function() {
-        console.log(mySwiper);
         mySwiper.swipeNext();
     },
 
@@ -55,18 +54,12 @@ var Timer = React.createClass({
     },
 
     componentDidMount: function() {
-        var timeMin = document.getElementById("timer-setting").value * 60 * 10;
-        timePlayer1 = timeMin;
-        timePlayer2 = timeMin;
-        this.setState({
-            startTime: timeMin
-        });
-        this.setTimerToPlayer("player1");
-        this.setTimerToPlayer("player2");
+        this.initGame();
         this.timer = setInterval(this.tick, 100);
     },
 
     changeTurn: function(player) {
+        console.log("START NEW IS " +startNew);
         if (startNew) {
             this.changePlayerTurn(player);
             return;
@@ -88,7 +81,9 @@ var Timer = React.createClass({
              } else {
                  turn = "player1";
              }
+             console.log("changed to false");
              startNew = false;
+             paused = false;
         } else {
             if (player == "player1") {
                 if (turn == "player1") {
@@ -173,10 +168,15 @@ var Timer = React.createClass({
     },
 
     newGame: function() {
-        newGame = true;
+        startNew = true;
         paused = true;
-        timePlayer1 = this.state.startTime;
-        timePlayer2 = this.state.startTime;
+        this.initGame();
+    },
+
+    initGame: function() {
+        var timeMin = document.getElementById("timer-setting").value * 60 * 10;
+        timePlayer1 = timeMin;
+        timePlayer2 = timeMin;
         this.setTimerToPlayer("player1");
         this.setTimerToPlayer("player2");
     },
