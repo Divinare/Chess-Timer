@@ -4,10 +4,6 @@
 
 var Settings = React.createClass({
 
-    startGame: function() {
-        mySwiper.swipeNext();
-    },
-
     render: function () {
         
         return (
@@ -28,7 +24,7 @@ var Settings = React.createClass({
                     <option value="60">60 min</option>
                 </select>
                
-                <button id='startButton' value="" onClick={this.startGame}>Start!</button>
+                <button id='startButton' value="" onClick={this.props.startGame}>Start!</button>
 
             </div>
         );
@@ -157,19 +153,29 @@ var Timer = React.createClass({
     pauseGame: function() {
         console.log("game pause changed");
         if (paused) {
-            paused = false;
+            this.changePausedTo(false);
         //    changePauseText("Pause");
          //   setTimeout('Decrease()',100);
         } else {
-            paused = true;
+           this.changePausedTo(true);
        //     changePauseText("Unpause");
         }
         console.log("paused " + paused);
     },
 
+    changePausedTo: function(pause) {
+        if(pause) {
+            paused = true;
+            document.getElementById('pauseButton').innerHTML = "Unpause";
+        } else {
+            paused = false;
+            document.getElementById('pauseButton').innerHTML = "Pause";
+        }
+    },
+
     newGame: function() {
         startNew = true;
-        paused = true;
+        this.changePausedTo(false);
         this.initGame();
     },
 
@@ -182,7 +188,9 @@ var Timer = React.createClass({
     },
 
     render: function () {
-
+        if(this.props.startNew) {
+            this.newGame();
+        }
         return (
         <div className="swiper-slide timer">
             <div className="row">
@@ -206,9 +214,13 @@ var App = React.createClass({
 
     getInitialState: function() {
 
-   
+        return {startNew: false};
+    },
 
-        return null;
+    startGame: function() {
+        console.log("starting new game!!");
+        mySwiper.swipeNext();
+        this.setState({startNew: true });
     },
 
         render: function () {
@@ -216,8 +228,8 @@ var App = React.createClass({
         return (
             <div className="swiper-container">
                 <div className="swiper-wrapper">
-                    <Settings />
-                    <Timer />
+                    <Settings startGame={this.startGame} />
+                    <Timer startNew={this.state.startNew} />
                 </div>
                 <div className="pagination"></div>
             </div>
