@@ -1,0 +1,37 @@
+
+.settingsButton {
+    background: #0bcf4f;
+    background-image: -webkit-linear-gradient(top, #0bcf4f, #63dbb3);
+    background-image: -moz-linear-gradient(top, #0bcf4f, #63dbb3);
+    background-image: -ms-linear-gradient(top, #0bcf4f, #63dbb3);
+    background-image: -o-linear-gradient(top, #0bcf4f, #63dbb3);
+    background-image: linear-gradient(to bottom, #0bcf4f, #63dbb3);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 25px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+}
+
+.settingsButton:hover {
+    background: #628194;
+    background-image: -webkit-linear-gradient(top, #628194, #3498db);
+    background-image: -moz-linear-gradient(top, #628194, #3498db);
+    background-image: -ms-linear-gradient(top, #628194, #3498db);
+    background-image: -o-linear-gradient(top, #628194, #3498db);
+    background-image: linear-gradient(to bottom, #628194, #3498db);
+    text-decoration: none;
+}
+
+#advancedOptions {
+    display: none;
+}
+
+
+.startButton {
+    width: 30%;
+    top: 25px;
+}

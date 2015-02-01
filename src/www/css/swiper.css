@@ -1,0 +1,27 @@
+.swiper-container {
+  height: 100%;
+  width: 100%;
+}
+
+.swiper-slide {
+  width: 100%; 
+  height: 100%;
+
+}
+.index {
+   /* width: 100%; */
+}
+.swiper-slide-visible {
+  /*  width: 100%; */
+}
+.swiper-slide-active {
+ /*   width: 100%; */
+}
+
+.pagination {
+  position: absolute;
+  left: 0;
+  text-align: center;
+  bottom:5px;
+  width: 100%;
+}
