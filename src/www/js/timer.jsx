@@ -160,16 +160,10 @@ module.exports = React.createClass({
         }
         return (
         <div className="swiper-slide timer">
-            <div className="row">
                 <button className="playButton top" id="player1" onClick={this.changeTurn.bind(this, "player1")}>123</button>
-            </div>
-            <div className="row">
                    <button className="menuButton" id="pauseButton" onClick={this.pauseGame.bind(this, "")}>Pause</button>
                    <button className="menuButton" id="newGameButton" onClick={this.newGame.bind(this, "")}>New Game</button>
-            </div>
-            <div className="row">
                <button className="playButton bottom" id="player2" onClick={this.changeTurn.bind(this, "player2")}>4234</button>
-            </div>
         </div>
     );
     }

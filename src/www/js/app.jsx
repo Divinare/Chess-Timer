@@ -1,12 +1,7 @@
-
-
 var React = require('react');
 var Settings = require('./settings.jsx');
 var Timer = require('./timer.jsx');
 var Swiper = require('swiper');
-//var $ = require("react-jqueryui");
-//window.jQuery = require('../lib/jquery/dist/jquery-1.7.2.min.js');
-//window.$ = window.jQuery;
 
 var Content = React.createClass({
 	getInitialState: function() {
@@ -26,14 +21,12 @@ var Content = React.createClass({
   componentWillUnmount: function() {
     window.removeEventListener('resize', this.handleResize);
   },
-
-  handleUpdate: function() {
-    	$(".playButton").css({"height": (this.state.windowHeight*0.43) + "px"});	
-	    $(".playButton").css({"width": this.state.windowWidth + "px"});
-	    $(".menuButton").css({"height": (this.state.windowHeight*0.14) + "px"});
+ 
+	handleUpdate: function() {
+		$(".playButton").css({"height": (this.state.windowHeight*0.43) + "px"});	
+    	$(".playButton").css({"width": this.state.windowWidth + "px"});
+    	$(".menuButton").css({"height": (this.state.windowHeight*0.14) + "px"});
 	    $(".menuButton").css({"width": (this.state.windowWidth*0.5) + "px"});
-	    $(".increments").css({"width": (this.state.windowWidth*0.5) + "px"});
-	    $(".startButton").css({"width": (this.state.windowWidth*0.25) + "px"});
   },
 
 
@@ -57,9 +50,9 @@ var Content = React.createClass({
 		return (
             <div className="swiper-container">
                 <div className="swiper-wrapper">
-                    <Settings startGame={this.startGame} windowHeight={this.state.windowHeight} windowWidth={this.state.windowWidth}/>
+                    <Settings startGame={this.startGame} windowHeight={this.state.windowHeight} windowWidth={this.state.windowWidth} />
                     <Timer startNew={this.state.startNew} />
-                </div>
+                    </div>
                 <div className="pagination"></div>
             </div>
 			
