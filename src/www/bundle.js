@@ -21183,14 +21183,16 @@ if (typeof define === 'function' && define.amd) {
 }
 
 },{}],149:[function(require,module,exports){
+'use strict';
+
 var React = require('react');
 var Settings = require('./settings.jsx');
 var Timer = require('./timer.jsx');
 var Swiper = require('swiper');
 
 var Content = React.createClass({displayName: "Content",
-	getInitialState: function() {
-    aSettings = [];
+    getInitialState: function() {
+    var aSettings = [];
     aSettings["incrementP1"] = 0;
     aSettings["incrementP2"] = 0;
 		return {
@@ -21259,6 +21261,7 @@ React.renderComponent(
   React.createElement(Content, null),
   document.getElementById('content')
 );
+
 },{"./settings.jsx":150,"./timer.jsx":151,"react":147,"swiper":148}],150:[function(require,module,exports){
 'use strict';
 
@@ -21441,6 +21444,7 @@ var AdvancedSettings = React.createClass({displayName: "AdvancedSettings",
         );
     }
 });
+
 },{"react":147}],151:[function(require,module,exports){
 'use strict';
 

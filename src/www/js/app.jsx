@@ -1,11 +1,13 @@
+'use strict';
+
 var React = require('react');
 var Settings = require('./settings.jsx');
 var Timer = require('./timer.jsx');
 var Swiper = require('swiper');
 
 var Content = React.createClass({
-	getInitialState: function() {
-    aSettings = [];
+    getInitialState: function() {
+    var aSettings = [];
     aSettings["incrementP1"] = 0;
     aSettings["incrementP2"] = 0;
 		return {
