@@ -21184,27 +21184,65 @@ if (typeof define === 'function' && define.amd) {
 
 },{}],149:[function(require,module,exports){
 
+
 var React = require('react');
 var Settings = require('./settings.jsx');
 var Timer = require('./timer.jsx');
 var Swiper = require('swiper');
+//var $ = require("react-jqueryui");
+//window.jQuery = require('../lib/jquery/dist/jquery-1.7.2.min.js');
+//window.$ = window.jQuery;
 
 var Content = React.createClass({displayName: "Content",
 	getInitialState: function() {
+		return {
+			startNew: false,
+			windowWidth: window.innerWidth,
+			windowHeight: window.innerHeight
+		};
 
-		return {startNew: false};
 	},
+
+  componentDidMount: function() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleUpdate();
+  },
+
+  componentWillUnmount: function() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+
+  handleUpdate: function() {
+    	$(".playButton").css({"height": (this.state.windowHeight*0.43) + "px"});	
+	    $(".playButton").css({"width": this.state.windowWidth + "px"});
+	    $(".menuButton").css({"height": (this.state.windowHeight*0.14) + "px"});
+	    $(".menuButton").css({"width": (this.state.windowWidth*0.5) + "px"});
+	    $(".increments").css({"width": (this.state.windowWidth*0.5) + "px"});
+	    $(".startButton").css({"width": (this.state.windowWidth*0.25) + "px"});
+  },
+
+
+
+  handleResize: function(e) {
+  	console.log("resized: " + this.state.windowWidth);
+    this.setState({
+    	windowWidth: window.innerWidth,
+    	windowHeight: window.innerHeight
+    });
+  //  this.forceUpdate();
+  },
+
 
 	startGame: function() {
 		mySwiper.swipeNext();
 		this.setState({startNew: true });
 	},
 	render: function() {
-
+		this.handleUpdate();
 		return (
             React.createElement("div", {className: "swiper-container"}, 
                 React.createElement("div", {className: "swiper-wrapper"}, 
-                    React.createElement(Settings, {startGame: this.startGame}), 
+                    React.createElement(Settings, {startGame: this.startGame, windowHeight: this.state.windowHeight, windowWidth: this.state.windowWidth}), 
                     React.createElement(Timer, {startNew: this.state.startNew})
                 ), 
                 React.createElement("div", {className: "pagination"})
@@ -21220,39 +21258,7 @@ React.renderComponent(
   React.createElement(Content, null),
   document.getElementById('content')
 );
-},{"./settings.jsx":151,"./timer.jsx":152,"react":147,"swiper":148}],150:[function(require,module,exports){
-
-'use strict';
-
-var React    = require('react');
-var Settings = require('./settings.jsx');
-var Timer = require('./timer.jsx');
-
-module.exports = React.createClass({displayName: "exports",
-
-    getInitialState: function() {
-
-        return {startNew: false};
-    },
-
-    startGame: function() {
-        mySwiper.swipeNext();
-        this.setState({startNew: true });
-    },
-
-    render: function () {
-        return (
-            React.createElement("div", {className: "swiper-container"}, 
-                React.createElement("div", {className: "swiper-wrapper"}, 
-                    React.createElement(Settings, {startGame: this.startGame}), 
-                    React.createElement(Timer, {startNew: this.state.startNew})
-                ), 
-                React.createElement("div", {className: "pagination"})
-            )
-        );
-    }
-});
-},{"./settings.jsx":151,"./timer.jsx":152,"react":147}],151:[function(require,module,exports){
+},{"./settings.jsx":150,"./timer.jsx":151,"react":147,"swiper":148}],150:[function(require,module,exports){
 /** @jsx React.DOM */
 
 'use strict';
@@ -21272,10 +21278,13 @@ module.exports = React.createClass({displayName: "exports",
     },
 
     componentDidMount: function() {
-        var width = document.getElementById("timer-setting").offsetWidth;
-        document.getElementById("timer-setting").style.width = (width - 50) +'px';
-        
+        this.handleUpdate();
     },
+
+    handleUpdate: function() {
+        $("#timer-setting").css({"width": (this.props.windowWidth-100) + "px"});
+    },
+
 
     showAdvancedOptions: function() {
         if(this.state.showAdvancedOptions) {
@@ -21289,7 +21298,10 @@ module.exports = React.createClass({displayName: "exports",
     },
 
     incrementChange: function(value){
-        console.log("thasd " + this.state.advancedSettings["incrementP1"]);
+       // console.log("thasd " + this.state.advancedSettings["incrementP1"]);
+       // var advancedSettings = this.state.advancedSettings;
+       // advancedSettings["incrementP1"] = value; ...
+
       //  this.setState({
           //  advancedSettings["incrementP1"] = value;
    //     });
@@ -21299,7 +21311,7 @@ module.exports = React.createClass({displayName: "exports",
     },
 
     render: function () {
-        
+        this.handleUpdate();
         return (
             React.createElement("div", {className: "swiper-slide index"}, 
                 React.createElement("div", {className: "settings"}, 
@@ -21361,7 +21373,7 @@ var AdvancedOptions = React.createClass({displayName: "AdvancedOptions",
 
 // http://stackoverflow.com/questions/24019431/how-to-properly-validate-input-values-with-react-js
 
-},{"react":147}],152:[function(require,module,exports){
+},{"react":147}],151:[function(require,module,exports){
 /** @jsx React.DOM */
 
 'use strict';
@@ -21539,4 +21551,4 @@ module.exports = React.createClass({displayName: "exports",
     }
 });
 
-},{"react":147}]},{},[149,150,151,152]);
+},{"react":147}]},{},[149,150,151]);

@@ -17,10 +17,13 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        var width = document.getElementById("timer-setting").offsetWidth;
-        document.getElementById("timer-setting").style.width = (width - 50) +'px';
-        
+        this.handleUpdate();
     },
+
+    handleUpdate: function() {
+        $("#timer-setting").css({"width": (this.props.windowWidth-100) + "px"});
+    },
+
 
     showAdvancedOptions: function() {
         if(this.state.showAdvancedOptions) {
@@ -34,7 +37,10 @@ module.exports = React.createClass({
     },
 
     incrementChange: function(value){
-        console.log("thasd " + this.state.advancedSettings["incrementP1"]);
+       // console.log("thasd " + this.state.advancedSettings["incrementP1"]);
+       // var advancedSettings = this.state.advancedSettings;
+       // advancedSettings["incrementP1"] = value; ...
+
       //  this.setState({
           //  advancedSettings["incrementP1"] = value;
    //     });
@@ -44,7 +50,7 @@ module.exports = React.createClass({
     },
 
     render: function () {
-        
+        this.handleUpdate();
         return (
             <div className="swiper-slide index">
                 <div className="settings">
