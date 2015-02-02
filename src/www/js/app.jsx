@@ -5,10 +5,14 @@ var Swiper = require('swiper');
 
 var Content = React.createClass({
 	getInitialState: function() {
+    aSettings = [];
+    aSettings["incrementP1"] = 0;
+    aSettings["incrementP2"] = 0;
 		return {
 			startNew: false,
 			windowWidth: window.innerWidth,
-			windowHeight: window.innerHeight
+			windowHeight: window.innerHeight,
+      advancedSettings: aSettings
 		};
 
 	},
@@ -23,44 +27,48 @@ var Content = React.createClass({
   },
  
 	handleUpdate: function() {
-		$(".playButton").css({"height": (this.state.windowHeight*0.43) + "px"});	
+		  $(".playButton").css({"height": (this.state.windowHeight*0.43) + "px"});	
     	$(".playButton").css({"width": this.state.windowWidth + "px"});
     	$(".menuButton").css({"height": (this.state.windowHeight*0.14) + "px"});
 	    $(".menuButton").css({"width": (this.state.windowWidth*0.5) + "px"});
   },
 
-
+  updateAdvancedSettings: function(aSettings) {
+      this.setState({
+         advancedSettings: aSettings
+      });
+  },
 
   handleResize: function(e) {
-  	console.log("resized: " + this.state.windowWidth);
     this.setState({
     	windowWidth: window.innerWidth,
     	windowHeight: window.innerHeight
     });
-  //  this.forceUpdate();
   },
 
 
 	startGame: function() {
-		mySwiper.swipeNext();
+		swiper.swipeNext();
 		this.setState({startNew: true });
 	},
 	render: function() {
 		this.handleUpdate();
 		return (
-            <div className="swiper-container">
-                <div className="swiper-wrapper">
-                    <Settings startGame={this.startGame} windowHeight={this.state.windowHeight} windowWidth={this.state.windowWidth} />
-                    <Timer startNew={this.state.startNew} />
-                    </div>
-                <div className="pagination"></div>
-            </div>
+        <div className="swiper-container">
+            <div className="swiper-wrapper">
+                <Settings startGame={this.startGame}
+                   updateAdvancedSettings={this.updateAdvancedSettings}
+                   windowHeight={this.state.windowHeight}
+                   windowWidth={this.state.windowWidth} />
+                <Timer startNew={this.state.startNew}
+                  advancedSettings={this.state.advancedSettings} />
+        </div>
+        <div className="pagination"></div>
+        </div>
 			
 		);
 	}
 });
-
-//React.renderComponent(<Content />, document.getElementById('content'));
 
 React.renderComponent(
   <Content />,

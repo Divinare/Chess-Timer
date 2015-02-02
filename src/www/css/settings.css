@@ -42,7 +42,11 @@
     display: none;
 }
 
+#advancedSetting {
+    color: #993333;
+}
+
 .increments {
     display: inline-block;
-    width: 150px;
+    width: 75px;
 }

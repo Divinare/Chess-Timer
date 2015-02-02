@@ -21190,10 +21190,14 @@ var Swiper = require('swiper');
 
 var Content = React.createClass({displayName: "Content",
 	getInitialState: function() {
+    aSettings = [];
+    aSettings["incrementP1"] = 0;
+    aSettings["incrementP2"] = 0;
 		return {
 			startNew: false,
 			windowWidth: window.innerWidth,
-			windowHeight: window.innerHeight
+			windowHeight: window.innerHeight,
+      advancedSettings: aSettings
 		};
 
 	},
@@ -21208,52 +21212,54 @@ var Content = React.createClass({displayName: "Content",
   },
  
 	handleUpdate: function() {
-		$(".playButton").css({"height": (this.state.windowHeight*0.43) + "px"});	
+		  $(".playButton").css({"height": (this.state.windowHeight*0.43) + "px"});	
     	$(".playButton").css({"width": this.state.windowWidth + "px"});
     	$(".menuButton").css({"height": (this.state.windowHeight*0.14) + "px"});
 	    $(".menuButton").css({"width": (this.state.windowWidth*0.5) + "px"});
   },
 
-
+  updateAdvancedSettings: function(aSettings) {
+      this.setState({
+         advancedSettings: aSettings
+      });
+  },
 
   handleResize: function(e) {
-  	console.log("resized: " + this.state.windowWidth);
     this.setState({
     	windowWidth: window.innerWidth,
     	windowHeight: window.innerHeight
     });
-  //  this.forceUpdate();
   },
 
 
 	startGame: function() {
-		mySwiper.swipeNext();
+		swiper.swipeNext();
 		this.setState({startNew: true });
 	},
 	render: function() {
 		this.handleUpdate();
 		return (
-            React.createElement("div", {className: "swiper-container"}, 
-                React.createElement("div", {className: "swiper-wrapper"}, 
-                    React.createElement(Settings, {startGame: this.startGame, windowHeight: this.state.windowHeight, windowWidth: this.state.windowWidth}), 
-                    React.createElement(Timer, {startNew: this.state.startNew})
-                    ), 
-                React.createElement("div", {className: "pagination"})
-            )
+        React.createElement("div", {className: "swiper-container"}, 
+            React.createElement("div", {className: "swiper-wrapper"}, 
+                React.createElement(Settings, {startGame: this.startGame, 
+                   updateAdvancedSettings: this.updateAdvancedSettings, 
+                   windowHeight: this.state.windowHeight, 
+                   windowWidth: this.state.windowWidth}), 
+                React.createElement(Timer, {startNew: this.state.startNew, 
+                  advancedSettings: this.state.advancedSettings})
+        ), 
+        React.createElement("div", {className: "pagination"})
+        )
 			
 		);
 	}
 });
-
-//React.renderComponent(<Content />, document.getElementById('content'));
 
 React.renderComponent(
   React.createElement(Content, null),
   document.getElementById('content')
 );
 },{"./settings.jsx":150,"./timer.jsx":151,"react":147,"swiper":148}],150:[function(require,module,exports){
-/** @jsx React.DOM */
-
 'use strict';
 
 var React = require('react');
@@ -21265,7 +21271,7 @@ module.exports = React.createClass({displayName: "exports",
         aSettings["incrementP1"] = 0;
         aSettings["incrementP2"] = 0;
         return {
-            showAdvancedOptions: false,
+            showAdvancedSettings: false,
             advancedSettings: aSettings
         };
     },
@@ -21280,22 +21286,23 @@ module.exports = React.createClass({displayName: "exports",
 
 
     showAdvancedSettings: function() {
-        if(this.state.showAdvancedOptions) {
+        if(this.state.showAdvancedSettings) {
             $("#advancedSettings").hide(300);
         } else {
             $("#advancedSettings").show(300);
         }
         this.setState({
-            showAdvancedOptions: !this.state.showAdvancedOptions
+            showAdvancedSettings: !this.state.showAdvancedSettings
         });
     },
 
-    createAdvancedSettingsText: function() {
-
-
-
+    resetSetting: function(id) {
+        var aSettings = this.state.advancedSettings;
+        aSettings[id] = 0;
+        this.setState({
+            advancedSettings: aSettings
+        });
     },
-
 
     incrementChange: function(input, id){
          // if input is not a number and its length is > 0
@@ -21304,6 +21311,9 @@ module.exports = React.createClass({displayName: "exports",
         }
         if(input.length == 0) {
             input = 0;
+        }
+        if(input > 99) {
+            input = 99;
         }
         input = parseInt(input, 10);
         var aSettings = this.state.advancedSettings;
@@ -21317,6 +21327,11 @@ module.exports = React.createClass({displayName: "exports",
         this.setState({
             advancedSettings: aSettings
         });
+        this.updateAdvancedSettings();
+    },
+
+    updateAdvancedSettings: function() {
+        this.props.updateAdvancedSettings(this.state.advancedSettings);
     },
 
     render: function () {
@@ -21340,7 +21355,15 @@ module.exports = React.createClass({displayName: "exports",
                         React.createElement("option", {value: "50"}, "50 min"), 
                         React.createElement("option", {value: "60"}, "60 min")
                     ), 
-                    React.createElement(AdvancedSettings, {advancedSettings: this.state.advancedSettings, incrementChanged: this.incrementChange}), 
+                    this.state.showAdvancedSettings == false ?
+                        React.createElement(AdvancedSettingsText, {
+                        advancedSettings: this.state.advancedSettings, 
+                        resetSetting: this.resetSetting, 
+                        show: true}) : null, 
+                    
+                    React.createElement(AdvancedSettings, {
+                    advancedSettings: this.state.advancedSettings, 
+                    incrementChanged: this.incrementChange}), 
 
                     React.createElement("br", null), 
                     React.createElement("a", {onClick: this.showAdvancedSettings}, this.state.showAdvancedSettings ? React.createElement("span", null, "Hide advanced options") : React.createElement("span", null, "Show advanced options")), 
@@ -21349,6 +21372,40 @@ module.exports = React.createClass({displayName: "exports",
                 )
             )
         );
+    }
+});
+
+var AdvancedSettingsText = React.createClass({displayName: "AdvancedSettingsText",
+
+    resetSetting: function(ad) {
+        console.log("wat " + ad);
+    },
+
+    render: function() {
+        var incrementP1 = this.props.advancedSettings["incrementP1"];
+        var incrementP2 = this.props.advancedSettings["incrementP2"];
+        var showSettingsText = false;
+        if(incrementP1 > 0 || incrementP2 > 0) {
+            showSettingsText = true;
+        }
+        return(
+            React.createElement("span", null, 
+                 incrementP1 > 0 ? React.createElement("td", null, React.createElement(AdvancedSetting, {text: "Player1 increment " + incrementP1, id: "incrementP1", resetSetting: this.props.resetSetting})) : null, 
+                 incrementP2 > 0 ? React.createElement("td", null, React.createElement(AdvancedSetting, {text: "Player2 increment " + incrementP2, id: "incrementP2", resetSetting: this.props.resetSetting})) : null
+            )
+
+            );
+    }
+});
+
+var AdvancedSetting = React.createClass({displayName: "AdvancedSetting",
+
+    render: function() {
+        return (
+            React.createElement("div", null, 
+                 this.props.text + " ", React.createElement("a", {id: "advancedSetting", onClick: this.props.resetSetting.bind(null, this.props.id)}, "[x]")
+            )
+            ); 
     }
 });
 
@@ -21362,32 +21419,29 @@ var AdvancedSettings = React.createClass({displayName: "AdvancedSettings",
         var settings = this.props.advancedSettings;
         return (
             React.createElement("div", {id: "advancedSettings"}, 
-            React.createElement("h3", null, "Increments:"), 
+            React.createElement("h3", null, "Time increments:"), 
                     React.createElement("text", null, "Player1: "), 
                     React.createElement("div", {className: "increments"}, 
-                       React.createElement("input", {type: "number", 
-                          id: "1", 
-                          value: settings["incrementP1"], 
-                          onChange: this.incrementChanged})
+                        React.createElement("input", {type: "number", 
+                            id: "1", 
+                            value: settings["incrementP1"], 
+                            onChange: this.incrementChanged})
                     ), 
+                    React.createElement("text", null, " seconds"), 
                     React.createElement("br", null), 
                     React.createElement("text", null, "Player1: "), 
                     React.createElement("div", {className: "increments"}, 
                         React.createElement("input", {type: "number", 
-                          id: "2", 
-                          value: settings["incrementP2"], 
-                          onChange: this.incrementChanged})
-                    )
+                            id: "2", 
+                            value: settings["incrementP2"], 
+                            onChange: this.incrementChanged})
+                    ), 
+                    React.createElement("text", null, " seconds")
             )
         );
-    } // http://jsbin.com/rixido/2/edit?html,js,output
+    }
 });
-
-// http://stackoverflow.com/questions/24019431/how-to-properly-validate-input-values-with-react-js
-
 },{"react":147}],151:[function(require,module,exports){
-/** @jsx React.DOM */
-
 'use strict';
 
 var React = require('react');
@@ -21396,21 +21450,29 @@ var timePlayer1; // 10 of this is one second
 var timePlayer2; // 10 of this is one second
 var paused = false;
 var turn = "";
-var incrementPlayer1 = 0;
-var incrementPlayer2 = 0;
 var startNew = true;
 
 module.exports = React.createClass({displayName: "exports",
 
     getInitialState: function() {
         return {
-
+            incrementP1: 0,
+            incrementP2: 0
         };
     },
 
     componentDidMount: function() {
         this.initGame();
         this.timer = setInterval(this.tick, 100);
+    },
+
+
+    updateSettings: function() {
+        var aSettings = this.props.advancedSettings;
+        this.setState({
+            incrementP1: aSettings["incrementP1"],
+            incrementP2: aSettings["incrementP2"]
+        });
 
     },
 
@@ -21420,7 +21482,6 @@ module.exports = React.createClass({displayName: "exports",
             return;
         }
         if (paused) {
-            console.log("game was paused");
             return;
         }
         this.changePlayerTurn(player);
@@ -21439,12 +21500,13 @@ module.exports = React.createClass({displayName: "exports",
             if (player == "player1") {
                 if (turn == "player1") {
                     turn = "player2";
-               //     timePlayer1 = (parseInt(timePlayer1) + parseInt(incrementP1));
+                    timePlayer1 += (10*this.props.advancedSettings["incrementP1"]);
+
                 }        
             } else {
                 if (turn == "player2") {
                     turn = "player1";
-                 //   timePlayer2 = (parseInt(timePlayer2) + parseInt(incrementP2));
+                    timePlayer2 += (10*this.props.advancedSettings["incrementP2"]);
                 }
             }
         }
@@ -21466,7 +21528,8 @@ module.exports = React.createClass({displayName: "exports",
         }
         var milSecs = playerTime.toString().charAt(playerTime.toString().length-1);
         
-        document.getElementById(player).innerHTML = mins + ":" + secs + ":" + milSecs;
+
+         document.getElementById(player).innerHTML = mins + ":" + secs + ":" + milSecs;
     
     },
 
@@ -21477,18 +21540,16 @@ module.exports = React.createClass({displayName: "exports",
         if (startNew == true) {
             return;
         }
+        if (timePlayer1 <= 0 || timePlayer2 <= 0) {
+            this.endGame();
+            return;
+        }
         if (turn == "player1") {
             timePlayer1--;
         } else {
             timePlayer2--;
         }
         this.setTimerToButtons();
-        var gameEnd = this.isGameEnded();
-        if (gameEnd == "gameContinues") {
-           // setTimeout('Decrease()', 100);
-        } else {
-            this.endGame(gameEnd);
-        }
     },
 
     setTimerToButtons: function() {
@@ -21496,26 +21557,21 @@ module.exports = React.createClass({displayName: "exports",
         this.setTimerToPlayer("player2");
     },
 
-    isGameEnded: function() {
+    endGame: function() {
         if (timePlayer1 <= 0) {
-            return "player2wins"
-        } else if (timePlayer2 <= 0) {
-            return "player1wins"
+            document.getElementById("player2").innerHTML = "Winner!";
         }
-        return "gameContinues";
+        if (timePlayer2 <= 0) {
+            document.getElementById("player1").innerHTML = "Winner!";
+        }
     },
 
     pauseGame: function() {
-        console.log("game pause changed");
         if (paused) {
             this.changePausedTo(false);
-        //    changePauseText("Pause");
-         //   setTimeout('Decrease()',100);
         } else {
            this.changePausedTo(true);
-       //     changePauseText("Unpause");
         }
-        console.log("paused " + paused);
     },
 
     changePausedTo: function(pause) {
@@ -21546,12 +21602,13 @@ module.exports = React.createClass({displayName: "exports",
         if(this.props.startNew) {
             this.newGame();
         }
+
         return (
         React.createElement("div", {className: "swiper-slide timer"}, 
-                React.createElement("button", {className: "playButton top", id: "player1", onClick: this.changeTurn.bind(this, "player1")}, "123"), 
+                React.createElement("button", {className: "playButton top", id: "player1", onClick: this.changeTurn.bind(this, "player1")}), 
                    React.createElement("button", {className: "menuButton", id: "pauseButton", onClick: this.pauseGame.bind(this, "")}, "Pause"), 
                    React.createElement("button", {className: "menuButton", id: "newGameButton", onClick: this.newGame.bind(this, "")}, "New Game"), 
-               React.createElement("button", {className: "playButton bottom", id: "player2", onClick: this.changeTurn.bind(this, "player2")}, "4234")
+               React.createElement("button", {className: "playButton bottom", id: "player2", onClick: this.changeTurn.bind(this, "player2")})
         )
     );
     }

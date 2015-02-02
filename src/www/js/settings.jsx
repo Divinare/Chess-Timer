@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 'use strict';
 
 var React = require('react');
@@ -11,7 +9,7 @@ module.exports = React.createClass({
         aSettings["incrementP1"] = 0;
         aSettings["incrementP2"] = 0;
         return {
-            showAdvancedOptions: false,
+            showAdvancedSettings: false,
             advancedSettings: aSettings
         };
     },
@@ -26,22 +24,23 @@ module.exports = React.createClass({
 
 
     showAdvancedSettings: function() {
-        if(this.state.showAdvancedOptions) {
+        if(this.state.showAdvancedSettings) {
             $("#advancedSettings").hide(300);
         } else {
             $("#advancedSettings").show(300);
         }
         this.setState({
-            showAdvancedOptions: !this.state.showAdvancedOptions
+            showAdvancedSettings: !this.state.showAdvancedSettings
         });
     },
 
-    createAdvancedSettingsText: function() {
-
-
-
+    resetSetting: function(id) {
+        var aSettings = this.state.advancedSettings;
+        aSettings[id] = 0;
+        this.setState({
+            advancedSettings: aSettings
+        });
     },
-
 
     incrementChange: function(input, id){
          // if input is not a number and its length is > 0
@@ -50,6 +49,9 @@ module.exports = React.createClass({
         }
         if(input.length == 0) {
             input = 0;
+        }
+        if(input > 99) {
+            input = 99;
         }
         input = parseInt(input, 10);
         var aSettings = this.state.advancedSettings;
@@ -63,6 +65,11 @@ module.exports = React.createClass({
         this.setState({
             advancedSettings: aSettings
         });
+        this.updateAdvancedSettings();
+    },
+
+    updateAdvancedSettings: function() {
+        this.props.updateAdvancedSettings(this.state.advancedSettings);
     },
 
     render: function () {
@@ -86,7 +93,15 @@ module.exports = React.createClass({
                         <option value="50">50 min</option>
                         <option value="60">60 min</option>
                     </select>
-                    <AdvancedSettings advancedSettings={this.state.advancedSettings} incrementChanged={this.incrementChange}/>
+                    {this.state.showAdvancedSettings == false ?
+                        <AdvancedSettingsText
+                        advancedSettings={this.state.advancedSettings}
+                        resetSetting={this.resetSetting}
+                        show={true} /> : null }
+                    
+                    <AdvancedSettings
+                    advancedSettings={this.state.advancedSettings}
+                    incrementChanged={this.incrementChange} />
 
                     <br />
                     <a onClick={this.showAdvancedSettings}>{this.state.showAdvancedSettings ? <span>Hide advanced options</span> : <span>Show advanced options</span>}</a>
@@ -95,6 +110,40 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
+    }
+});
+
+var AdvancedSettingsText = React.createClass({
+
+    resetSetting: function(ad) {
+        console.log("wat " + ad);
+    },
+
+    render: function() {
+        var incrementP1 = this.props.advancedSettings["incrementP1"];
+        var incrementP2 = this.props.advancedSettings["incrementP2"];
+        var showSettingsText = false;
+        if(incrementP1 > 0 || incrementP2 > 0) {
+            showSettingsText = true;
+        }
+        return(
+            <span>
+                { incrementP1 > 0 ? <td><AdvancedSetting text={"Player1 increment " + incrementP1} id={"incrementP1"} resetSetting={this.props.resetSetting} /></td> : null}
+                { incrementP2 > 0 ? <td><AdvancedSetting text={"Player2 increment " + incrementP2} id={"incrementP2"} resetSetting={this.props.resetSetting}/></td> : null}
+            </span>
+
+            );
+    }
+});
+
+var AdvancedSetting = React.createClass({
+
+    render: function() {
+        return (
+            <div>
+                 {this.props.text + " "}<a id="advancedSetting" onClick={this.props.resetSetting.bind(null, this.props.id)}>[x]</a>
+            </div>
+            ); 
     }
 });
 
@@ -108,25 +157,25 @@ var AdvancedSettings = React.createClass({
         var settings = this.props.advancedSettings;
         return (
             <div id="advancedSettings">
-            <h3>Increments:</h3>
+            <h3>Time increments:</h3>
                     <text>Player1: </text>
                     <div className="increments">
-                       <input type="number"
-                          id="1"
-                          value={settings["incrementP1"]}
-                          onChange={this.incrementChanged} />
+                        <input type="number"
+                            id="1"
+                            value={settings["incrementP1"]}
+                            onChange={this.incrementChanged} />
                     </div>
+                    <text> seconds</text>
                     <br />
                     <text>Player1: </text>
                     <div className="increments">
                         <input type="number"
-                          id="2"
-                          value={settings["incrementP2"]}
-                          onChange={this.incrementChanged} />
+                            id="2"
+                            value={settings["incrementP2"]}
+                            onChange={this.incrementChanged} />
                     </div>
+                    <text> seconds</text>
             </div>
         );
-    } // http://jsbin.com/rixido/2/edit?html,js,output
+    }
 });
-
-// http://stackoverflow.com/questions/24019431/how-to-properly-validate-input-values-with-react-js
